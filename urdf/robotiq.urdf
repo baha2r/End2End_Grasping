@@ -1,0 +1,409 @@
+<?xml version="1.0" encoding="utf-8" ?>
+
+<robot name="robotiq" xmlns:xacro="http://wiki.ros.org/xacro">
+
+    <material name="palm_color">
+        <color rgba="0.2 0.2 0.2 1" specular="0.7" shininess="50.0" reflectance="0.7" />
+    </material>
+    <material name="link0_color">
+        <color rgba="0.2 0.2 0.2 1" specular="0.7" shininess="50.0" reflectance="0.7" />
+    </material>
+    <material name="link1_color">
+        <color rgba="0 0 0 1" specular="1.0" shininess="100.0" reflectance="1.0" />
+    </material>
+    <material name="link2_color">
+        <color rgba="0.2 0.2 0.2 1" specular="0.7" shininess="50.0" reflectance="0.7" />
+    </material>
+    <material name="link3_color">
+        <color rgba="0.5 0.5 0.5 1" specular="0.5" shininess="0.5" reflectance="0.5" />
+    </material>
+
+    <link name="palm">
+        <visual>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/palm.dae" />
+            </geometry>
+            <material name="palm_color">
+            </material>
+        </visual>
+        <collision>
+            <origin xyz="0 0 0" rpy="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/collision/palm.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin xyz="0 0 0" rpy="1.57 1.57 1.57" />
+            <mass value="1.3" />
+            <inertia ixx="0.006012" ixy="0.000079" ixz="-0.00024" iyy="0.012892" iyz="0" izz="0.002435" />
+        </inertial>
+    </link>
+    <link name="finger_1_link_0">
+        <visual>
+            <origin rpy="0 0 0" xyz="0.020 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_0.dae" />
+            </geometry>
+            <material name="link0_color">
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 3.1416 -1.57" xyz="-0.0455 0.0414 0.036" />
+            <geometry>
+                <mesh filename="meshes/collision/link_0.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.05" />
+            <inertia ixx="0.01" ixy="-0.00002" ixz="0.00001" iyy="0.0008" iyz="0" izz="0.001" />
+        </inertial>
+    </link>
+    <link name="finger_1_link_1">
+        <visual>
+            <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_1.dae" />
+            </geometry>
+            <material name="link1_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+            <geometry>
+                <mesh filename="meshes/collision/link_1.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.15" />
+            <inertia ixx="0.001859" ixy="-0.000376" ixz="0.000028" iyy="0.012756" iyz="0" izz="0.0024" />
+        </inertial>
+    </link>
+    <link name="finger_1_link_2">
+        <!--
+			NOTE: This link has an offset in the z-direction based on the models that were
+			used to generate grap-it poses.  With the offset below the model appears visually
+			correct, but it is suspect.
+			-->
+        <visual>
+            <origin rpy="0 0 0" xyz="0.039 0 0.0075" />
+            <geometry>
+                <mesh filename="meshes/visual/link_2.dae" />
+            </geometry>
+            <material name="link2_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.039 0 0.0075" />
+            <geometry>
+                <mesh filename="meshes/collision/link_2.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.15" />
+            <inertia ixx="0.001859" ixy="-0.000376" ixz="0.000028" iyy="0.012756" iyz="0" izz="0.0024" />
+        </inertial>
+    </link>
+    <link name="finger_1_link_3">
+        <visual>
+            <origin rpy="0 0 0.52" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_3.dae" />
+            </geometry>
+            <material name="link3_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0.52" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="urdf/meshes/collision/link_3_modif.STL" />
+            </geometry>
+        </collision>        
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.05" />
+            <inertia ixx="0.001239" ixy="-0.000251" ixz="0.000019" iyy="0.00085" iyz="0" izz="0.001632" />
+        </inertial>
+        <contact>
+            <lateral_friction value="1.0"/>
+            <spinning_friction value=".001"/>
+            <rolling_friction value="0.03"/>
+        </contact>
+    </link>
+    <joint name="palm_finger_1_joint" type="fixed">
+        <parent link="palm" />
+        <child link="finger_1_link_0" />
+        <axis xyz="0 1 0" />
+        <origin rpy="0 3.1416 -1.57" xyz="-0.0455 0.0214 0.036" />
+    </joint>
+    <joint name="finger_1_joint_1" type="revolute">
+        <parent link="finger_1_link_0" />
+        <child link="finger_1_link_1" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.020 0 0" />
+        <limit lower="0" upper="1.1694" velocity="100" kp="500" kd="50" />
+    </joint>
+    <joint name="finger_1_joint_2" type="revolute">
+        <parent link="finger_1_link_1" />
+        <child link="finger_1_link_2" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+        <limit lower="0" upper="1.5708" velocity="100" kp="500" kd="50" />
+    </joint>
+    <joint name="finger_1_joint_3" type="revolute">
+        <parent link="finger_1_link_2" />
+        <child link="finger_1_link_3" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.039 0 0" />
+        <limit lower="-0.9599" upper="0.7505" velocity="100" kp="500" kd="50" />
+    </joint>
+    <link name="finger_2_link_0">
+        <visual>
+            <origin rpy="0 0 0" xyz="0.020 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_0.dae" />
+            </geometry>
+            <material name="link0_color">
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 3.1416 -1.57" xyz="-0.0455 0.0414 0.036" />
+            <geometry>
+                <mesh filename="meshes/collision/link_0.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.05" />
+            <inertia ixx="0.01" ixy="-0.00002" ixz="0.00001" iyy="0.0008" iyz="0" izz="0.001" />
+        </inertial>
+    </link>
+    <link name="finger_2_link_1">
+        <visual>
+            <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_1.dae" />
+            </geometry>
+            <material name="link1_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+            <geometry>
+                <mesh filename="meshes/collision/link_1.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.15" />
+            <inertia ixx="0.001859" ixy="-0.000376" ixz="0.000028" iyy="0.012756" iyz="0" izz="0.0024" />
+        </inertial>
+
+    </link>
+    <link name="finger_2_link_2">
+        <!--
+			NOTE: This link has an offset in the z-direction based on the models that were
+			used to generate grap-it poses.  With the offset below the model appears visually
+			correct, but it is suspect.
+			-->
+        <visual>
+            <origin rpy="0 0 0" xyz="0.039 0 0.0075" />
+            <geometry>
+                <mesh filename="meshes/visual/link_2.dae" />
+            </geometry>
+            <material name="link2_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.039 0 0.0075" />
+            <geometry>
+                <mesh filename="meshes/collision/link_2.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.15" />
+            <inertia ixx="0.001859" ixy="-0.000376" ixz="0.000028" iyy="0.012756" iyz="0" izz="0.0024" />
+        </inertial>
+
+    </link>
+    <link name="finger_2_link_3">
+        <visual>
+            <origin rpy="0 0 0.52" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_3.dae" />
+            </geometry>
+            <material name="link3_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0.52" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/collision/link_3_modif.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.05" />
+            <inertia ixx="0.001239" ixy="-0.000251" ixz="0.000019" iyy="0.00085" iyz="0" izz="0.001632" />
+        </inertial>
+        <contact>
+            <lateral_friction value="1.0"/>
+            <spinning_friction value=".001"/>
+            <rolling_friction value="0.03"/>
+        </contact>
+    </link>
+    <joint name="palm_finger_2_joint" type="fixed">
+        <parent link="palm" />
+        <child link="finger_2_link_0" />
+        <axis xyz="0 1 0" />
+        <origin rpy="0 3.1416 -1.57" xyz="-0.0455 0.0214 -0.036" />
+    </joint>
+    <joint name="finger_2_joint_1" type="revolute">
+        <parent link="finger_2_link_0" />
+        <child link="finger_2_link_1" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.020 0 0" />
+        <limit lower="0" upper="1.1694" velocity="100" kp="500" kd="50" />
+    </joint>
+    <joint name="finger_2_joint_2" type="revolute">
+        <parent link="finger_2_link_1" />
+        <child link="finger_2_link_2" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+        <limit lower="0" upper="1.5708" velocity="100" kp="500" kd="50" />
+    </joint>
+    <joint name="finger_2_joint_3" type="revolute">
+        <parent link="finger_2_link_2" />
+        <child link="finger_2_link_3" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.039 0 0" />
+        <limit lower="-0.9599" upper="0.7505" velocity="100" kp="500" kd="50" />
+    </joint>
+    <link name="finger_middle_link_0">
+        <visual>
+            <origin rpy="0 0 0" xyz="0.020 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_0.dae" />
+            </geometry>
+            <material name="link0_color">
+            </material>
+        </visual>
+        <collision>
+            <origin rpy="0 3.1416 -1.57" xyz="-0.0455 0.0414 0.036" />
+            <geometry>
+                <mesh filename="meshes/collision/link_0.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.05" />
+            <inertia ixx="0.01" ixy="-0.00002" ixz="0.00001" iyy="0.0008" iyz="0" izz="0.001" />
+        </inertial>
+
+    </link>
+    <link name="finger_middle_link_1">
+        <visual>
+            <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_1.dae" />
+            </geometry>
+            <material name="link1_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+            <geometry>
+                <mesh filename="meshes/collision/link_1.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.15" />
+            <inertia ixx="0.001859" ixy="-0.000376" ixz="0.000028" iyy="0.012756" iyz="0" izz="0.0024" />
+        </inertial>
+
+    </link>
+    <link name="finger_middle_link_2">
+        <!--
+			NOTE: This link has an offset in the z-direction based on the models that were
+			used to generate grap-it poses.  With the offset below the model appears visually
+			correct, but it is suspect.
+			-->
+        <visual>
+            <origin rpy="0 0 0" xyz="0.039 0 0.0075" />
+            <geometry>
+                <mesh filename="meshes/visual/link_2.dae" />
+            </geometry>
+            <material name="link2_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0" xyz="0.039 0 0.0075" />
+            <geometry>
+                <mesh filename="meshes/collision/link_2.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.15" />
+            <inertia ixx="0.001859" ixy="-0.000376" ixz="0.000028" iyy="0.012756" iyz="0" izz="0.0024" />
+        </inertial>
+
+    </link>
+    <link name="finger_middle_link_3">
+        <visual>
+            <origin rpy="0 0 0.52" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/visual/link_3.dae" />
+            </geometry>
+            <material name="link3_color" />
+        </visual>
+        <collision>
+            <origin rpy="0 0 0.52" xyz="0 0 0" />
+            <geometry>
+                <mesh filename="meshes/collision/link_3_modif.STL" />
+            </geometry>
+        </collision>
+        <inertial>
+            <origin rpy="0 0 0" xyz="0 0 0" />
+            <mass value="0.05" />
+            <inertia ixx="0.001239" ixy="-0.000251" ixz="0.000019" iyy="0.00085" iyz="0" izz="0.001632" />
+        </inertial>
+        <contact>
+            <lateral_friction value="1.0"/>
+            <spinning_friction value=".001"/>
+            <rolling_friction value="0.03"/>
+        </contact>
+    </link>
+    <joint name="palm_finger_middle_joint" type="fixed">
+        <parent link="palm" />
+        <child link="finger_middle_link_0" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 1.57" xyz="0.0455 0.0214 0" />
+    </joint>
+    <joint name="finger_middle_joint_1" type="revolute">
+        <parent link="finger_middle_link_0" />
+        <child link="finger_middle_link_1" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.020 0 0" />
+        <limit lower="0" upper="1.1694" velocity="100" kp="500" kd="50" />
+    </joint>
+    <joint name="finger_middle_joint_2" type="revolute">
+        <parent link="finger_middle_link_1" />
+        <child link="finger_middle_link_2" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 -0.52" xyz="0.050 -.028 0" />
+        <limit lower="0" upper="1.5708" velocity="100" kp="500" kd="50" />
+    </joint>
+    <joint name="finger_middle_joint_3" type="revolute">
+        <parent link="finger_middle_link_2" />
+        <child link="finger_middle_link_3" />
+        <axis xyz="0 0 1" />
+        <origin rpy="0 0 0" xyz="0.039 0 0" />
+        <limit lower="-0.9599" upper="0.7505" velocity="100" kp="500" kd="50" />
+    </joint>
+
+</robot>
+
+<!-- rubber fingertip
+<contact>
+    <lateral_friction value="1.5"/>
+    <spinning_friction value="0.05"/>
+    <rolling_friction value="0.1"/>
+</contact> -->
